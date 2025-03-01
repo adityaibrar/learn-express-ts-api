@@ -2,7 +2,7 @@ import prisma from "../prisma/client";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-const secretKey = 'secret_token'
+const secretKey = process.env.JWT_KEY
 
 class AuthService {
     async register(data: { email: string, username: string, password: string }) {
@@ -31,7 +31,7 @@ class AuthService {
         const isValid = await bcrypt.compare(password, user.password)
         if (!isValid) throw new Error('Password salah')
 
-        const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' })
+        const token = jwt.sign({ id: user.id, email: user.email }, secretKey!, { expiresIn: '1h' })
         return token
         }
 }
